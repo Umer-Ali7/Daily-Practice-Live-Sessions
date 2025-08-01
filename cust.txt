@@ -1,0 +1,101 @@
+PS C:\Users\Administrator\Desktop\Live-Session\class-1> uv run main.py
+Enter your question about the OpenAI Agent SDK: create a simple customer support agent.
+TOOL CALLED
+Okay, I've got the SDK documentation! Let's craft that customer support agent. Here's the plan:
+
+1.  **Agent Definition**: We'll define an agent with a clear role: assisting customers with product-related questions. 👩‍💻
+2.  **Instructions**: The agent's instructions will emphasize helpfulness, clarity, and a focus on problem-solving. 💡
+3.  **Tools (Functions)**: We'll equip the agent with tools to access product information, check order status, and escalate issues. 🧰 
+4.  **Run Configuration**: We'll set up a `RunConfig` to manage the agent's behavior during execution. ⚙️
+
+Here's the code:
+
+```python
+from agents import Agent, Tool, Runner
+from typing import Callable, Optional
+from pydantic import BaseModel, Field
+
+# 1. Define data models for tool inputs
+class ProductInfoInput(BaseModel):
+    product_id: str = Field(..., description="The ID of the product to retrieve information about.")
+
+class OrderStatusInput(BaseModel):
+    order_id: str = Field(..., description="The ID of the order to check the status of.")
+
+class EscalationInput(BaseModel):
+    customer_id: str = Field(..., description="The ID of the customer requiring escalation.")
+    issue_description: str = Field(..., description="A detailed description of the customer's issue.")
+
+
+# 2. Define the tools (functions)
+def get_product_info(product_id: str) -> str:
+    """Retrieves product information."""
+    # Simulate fetching product info from a database
+    if product_id == "123":
+        return "Product Name: Widget X, Description: A versatile widget, Price: $19.99"
+    else:
+        return "Product not found."
+
+def check_order_status(order_id: str) -> str:
+    """Checks the status of an order."""
+    # Simulate checking order status
+    if order_id == "456":
+        return "Order Status: Shipped, Tracking Number: ABC123XYZ"
+    else:
+        return "Order not found."
+
+def escalate_issue(customer_id: str, issue_description: str) -> str:
+    """Escalates an issue to a human support agent."""
+    # Simulate escalating the issue
+    return f"Escalated issue for customer {customer_id}: {issue_description}. A support agent will contact them shortly."
+
+# 3. Create Tool instances
+product_info_tool = Tool(
+    name="get_product_info",
+    description="Retrieves information about a product.",
+    func=get_product_info,
+    input_type=ProductInfoInput,
+)
+
+order_status_tool = Tool(
+    name="check_order_status",
+    description="Checks the status of an order.",
+    func=check_order_status,
+    input_type=OrderStatusInput,
+)
+
+escalate_issue_tool = Tool(
+    name="escalate_issue",
+    description="Escalates a customer issue to a human support agent.",
+    func=escalate_issue,
+    input_type=EscalationInput,
+)
+
+# 4. Define the Agent
+customer_support_agent = Agent(
+    name="CustomerSupportAgent",
+    instructions="You are a helpful customer support agent. Assist customers with product information, order status, and escalate issues when necessary. Be clear, concise, and polite.",
+    tools=[product_info_tool, order_status_tool, escalate_issue_tool],
+)
+
+# 5. Run the Agent
+user_query = "What is the status of order 456?"
+result = Runner.run_sync(customer_support_agent, user_query)
+print(result.final_output)
+
+user_query = "What is product 123?"
+result = Runner.run_sync(customer_support_agent, user_query)
+print(result.final_output)
+
+user_query = "I am customer 789 and my order is missing, I want to complain."
+result = Runner.run_sync(customer_support_agent, user_query)
+print(result.final_output)
+```
+
+This code defines a `CustomerSupportAgent` that can:
+
+*   Provide product information.
+*   Check order status.
+*   Escalate issues to a human agent.
+
+The agent uses three tools (`get_product_info`, `check_order_status`, and `escalate_issue`) to accomplish these tasks.  I've also added some example interactions to show how the agent responds to different user queries.  This is a basic example, but it demonstrates the core principles of building an agent with the OpenAI Agent SDK! ✨ Let me know if you'd like to expand on this! 🚀
