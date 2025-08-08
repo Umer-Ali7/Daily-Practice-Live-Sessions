@@ -66,27 +66,28 @@ triage_agent = Agent(
     handoffs=[openAI_Agent_sdk, agentic_Developer]
 )
 
-while True:
-    user_input = f"""Fetch the latest documentation from https://openai.github.io/openai-agents-python/index.html 
-and answer this question:\n\n{input("Enter your question about OpenAI Agent SDK ('exit' to break): ")}\n\n"""
-    result = Runner.run_sync(
-        triage_agent,
-        user_input,
-        run_config=run_config
-    )
-    print(result.final_output)
-    if user_input == 'exit':
-        print("Goodbye! 👋 see you next time...!")
-        break
+# while True:
+#     user_input = f"""Fetch the latest documentation from https://openai.github.io/openai-agents-python/index.html 
+# and answer this question:\n\n{input("Enter your question about OpenAI Agent SDK ('exit' to break): ")}\n\n"""
+#     result = Runner.run_sync(
+#         triage_agent,
+#         user_input,
+#         run_config=run_config
+#     )
+#     print(result.final_output)
+#     if user_input == 'exit':
+#         print("Goodbye! 👋 see you next time...!")
+#         break
 
-# prompt = f"""Fetch the latest documentation from https://openai.github.io/openai-agents-python/index.html 
-# and answer this question:\n\n{input("Enter your question about OpenAI Agent SDK: ")}\n\n"""
-
-# result = Runner.run_sync(
-#     triage_agent,
-#     prompt,
-#     run_config=run_config
-# )
+prompt = f"""Fetch the latest documentation from https://openai.github.io/openai-agents-python/index.html 
+and answer this question:\n\n{input("Enter your question about OpenAI Agent SDK: ")}\n\n"""
 
 
-# print(result.final_output)
+result = Runner.run_sync(
+    triage_agent,
+    prompt,
+    run_config=run_config
+)
+
+
+print(result.final_output)
