@@ -1,1 +1,2 @@
-# This Repo is for Daily Practice Sessions
+# This Repo is for Daily Practice Live Sessions
+
